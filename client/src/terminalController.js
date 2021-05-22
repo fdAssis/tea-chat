@@ -11,6 +11,18 @@ export default class TerminalController {
     };
   }
 
+  #onMessageReceived({ screen, chat }) {
+    return (msg) => {
+      const { userName, message } = msg;
+      chat.addItem(`{bold}${userName}{/}:${message}`);
+      screen.render();
+    };
+  }
+
+  #registerEvents(eventEmitter, components) {
+    eventEmitter.on('messager:received', this.#onMessageReceived(components));
+  }
+
   async itializeTable(eventEmitter) {
     const components = new ComponentsBuilder()
       .setScreen({ title: 'TeaChat' })
@@ -19,7 +31,21 @@ export default class TerminalController {
       .setChatComponent()
       .build();
 
+    this.#registerEvents(eventEmitter, components);
+
     components.input.focus();
     components.screen.render();
+
+    setInterval(() => {
+      eventEmitter.emit('messager:received', {
+        message: 'Hey',
+        userName: 'Francisco',
+      });
+
+      eventEmitter.emit('messager:received', {
+        message: 'Ho',
+        userName: 'Maria',
+      });
+    }, 2000);
   }
 }
