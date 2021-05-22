@@ -5,6 +5,8 @@ export default class ComponentsBuilder {
   #layout;
   #input;
   #chat;
+  #status;
+  #activityLog;
 
   constructor() {}
 
@@ -80,11 +82,41 @@ export default class ComponentsBuilder {
     return this;
   }
 
+  setStatusComponent() {
+    this.#status = blassed.list({
+      ...this.#baseComponent(),
+      parent: this.#layout,
+      width: '25%',
+      height: '90%',
+      items: ['{bold}User on Room{/}'],
+    });
+
+    return this;
+  }
+
+  setActivityLogComponent() {
+    this.#activityLog = blassed.list({
+      ...this.#baseComponent(),
+      parent: this.#layout,
+      width: '25%',
+      height: '90%',
+      style: {
+        fg: 'yellow',
+      },
+
+      items: ['{bold}Activity Log{/}'],
+    });
+
+    return this;
+  }
+
   build() {
     const components = {
       screen: this.#screen,
       input: this.#input,
       chat: this.#chat,
+      status: this.#status,
+      activityLog: this.#activityLog,
     };
 
     return components;
