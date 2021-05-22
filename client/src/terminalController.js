@@ -1,4 +1,5 @@
 import ComponentsBuilder from './components.js';
+import { constants } from './constants.js';
 
 export default class TerminalController {
   #usersCollors = new Map();
@@ -39,8 +40,28 @@ export default class TerminalController {
     };
   }
 
+  #onLogChaged({ screen, activityLog }) {
+    return (msg) => {
+      // francisco left
+      // francisco join
+
+      const [userName] = msg.split(/\s/);
+      const collor = this.#getUserCollor(userName);
+      activityLog.addItem(`{${collor}}{bold}${msg.toString()}{/}`);
+
+      screen.render();
+    };
+  }
+
   #registerEvents(eventEmitter, components) {
-    eventEmitter.on('messager:received', this.#onMessageReceived(components));
+    eventEmitter.on(
+      constants.events.app.MESSAGE_RECEIVED,
+      this.#onMessageReceived(components)
+    );
+    eventEmitter.on(
+      constants.events.app.ACTIVITYLOG_UPDATED,
+      this.#onLogChaged(components)
+    );
   }
 
   async itializeTable(eventEmitter) {
@@ -58,16 +79,29 @@ export default class TerminalController {
     components.input.focus();
     components.screen.render();
 
-    setInterval(() => {
-      eventEmitter.emit('messager:received', {
-        message: 'Hey',
-        userName: 'Francisco',
-      });
+    /** 
+     * Teste eventEmitter: 'messager:receive'
+     * 
+      setInterval(() => {
+        eventEmitter.emit('messager:receive', {
+          message: 'Hey',
+          userName: 'Francisco',
+        });
 
-      eventEmitter.emit('messager:received', {
-        message: 'Ho 😍',
-        userName: 'Maria',
-      });
+        eventEmitter.emit('messager:received', {
+          message: 'Ho 😍',
+          userName: 'Maria',
+        });
+      }, 2000);
+    */
+
+    setInterval(() => {
+      eventEmitter.emit('activityLog:updated', 'francisco join');
+      eventEmitter.emit('activityLog:updated', 'francisco left');
+      eventEmitter.emit('activityLog:updated', 'maria join');
+      eventEmitter.emit('activityLog:updated', 'maria left');
+      eventEmitter.emit('activityLog:updated', 'pedro join');
+      eventEmitter.emit('activityLog:updated', 'pedro lrft');
     }, 2000);
   }
 }
