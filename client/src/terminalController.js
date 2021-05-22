@@ -16,6 +16,7 @@ export default class TerminalController {
       .setScreen({ title: 'TeaChat' })
       .setLayoutComponent()
       .setInputComponent(this.#onInputRecevied(eventEmitter))
+      .setChatComponent()
       .build();
 
     components.input.focus();
