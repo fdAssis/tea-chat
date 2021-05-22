@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "user01": "node index.js --username francisco --room sala01 --hostUri https://localhost:8080",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Francisco de Assis",
