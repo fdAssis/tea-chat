@@ -53,6 +53,23 @@ export default class TerminalController {
     };
   }
 
+  #onStatusChaged({ screen, status }) {
+    // ['francisco', 'maria']
+    return (users) => {
+      //Vamos pegar o primeiro elemento da lista
+      const { content } = status.items.shift();
+      status.clearItems();
+      status.addItem(content);
+
+      users.forEach((userName) => {
+        const collor = this.#getUserCollor(userName);
+        status.addItem(`{${collor}}{bold}${userName}{/}`);
+      });
+
+      screen.render();
+    };
+  }
+
   #registerEvents(eventEmitter, components) {
     eventEmitter.on(
       constants.events.app.MESSAGE_RECEIVED,
@@ -61,6 +78,10 @@ export default class TerminalController {
     eventEmitter.on(
       constants.events.app.ACTIVITYLOG_UPDATED,
       this.#onLogChaged(components)
+    );
+    eventEmitter.on(
+      constants.events.app.STATUS_UPDATED,
+      this.#onStatusChaged(components)
     );
   }
 
@@ -79,6 +100,9 @@ export default class TerminalController {
     components.input.focus();
     components.screen.render();
 
+    // --------------------------- Mini testes -----------------------------
+    //----------------------------------------------------------------------
+
     /** 
      * Teste eventEmitter: 'messager:receive'
      * 
@@ -95,7 +119,10 @@ export default class TerminalController {
       }, 2000);
     */
 
-    setInterval(() => {
+    /**
+     * Teste eventEmitter: 'activityLog:updated'
+     * 
+      setInterval(() => {
       eventEmitter.emit('activityLog:updated', 'francisco join');
       eventEmitter.emit('activityLog:updated', 'francisco left');
       eventEmitter.emit('activityLog:updated', 'maria join');
@@ -103,5 +130,18 @@ export default class TerminalController {
       eventEmitter.emit('activityLog:updated', 'pedro join');
       eventEmitter.emit('activityLog:updated', 'pedro lrft');
     }, 2000);
+    */
+
+    /** 
+     * Teste eventEmitter: 'status:updated'
+      const users = ['franisco'];
+      eventEmitter.emit(constants.events.app.STATUS_UPDATED, users);
+      users.push('maria');
+      eventEmitter.emit(constants.events.app.STATUS_UPDATED, users);
+      users.push('pedro');
+      eventEmitter.emit(constants.events.app.STATUS_UPDATED, users);
+      users.push('joao');
+      eventEmitter.emit(constants.events.app.STATUS_UPDATED, users);
+    */
   }
 }
