@@ -20,9 +20,12 @@ export default class Controller {
   }
 
   async joinRoom(socketId, data) {
-    const userData = JSON.parse(data);
-    console.log(`${userData.userName} joined`[socketId]);
+    const userData = data;
+    console.log(`${userData.userName} joined! ${[socketId]}`);
+    const user = this.#updateGlobalUserData(socketId, userData);
+
     const { roomId } = userData;
+
     const users = this.#joinUserOnRoom(roomId, user);
 
     const currentUsers = Array.from(users.values()).map(({ id, userName }) => ({
@@ -37,16 +40,14 @@ export default class Controller {
       constants.event.UPDATE_USERS,
       currentUsers
     );
-
-    const user = this.#updateGlobalUserData(socketId, userName);
   }
 
   #joinUserOnRoom(roomId, user) {
-    const userOnRoom = this.#rooms.get(roomId) ?? new Map();
-    usersOnRooms.set(user.id, user);
-    this.#rooms.set(roomId, userOnRoom);
+    const usersOnRoom = this.#rooms.get(roomId) ?? new Map();
+    usersOnRoom.set(user.id, user);
+    this.#rooms.set(roomId, usersOnRoom);
 
-    return userOnRoom;
+    return usersOnRoom;
   }
 
   #onSocketClosed(id) {

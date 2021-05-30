@@ -25,7 +25,7 @@ export default class TerminalController {
   #onInputRecevied(eventEmitter) {
     return function () {
       const message = this.getValue();
-      console.log(message);
+      eventEmitter.emit(constants.events.app.MESSAGE_SET, message);
       this.clearValue();
     };
   }
