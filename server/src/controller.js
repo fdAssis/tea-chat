@@ -13,7 +13,7 @@ export default class Controller {
     console.log('connection stablished with', id);
     const userData = { id, socket };
     this.#updateGlobalUserData(id, userData);
-
+ 
     socket.on('data', this.#onSocketData(id));
     socket.on('error', this.#onSocketClosed(id));
     socket.on('end', this.#onSocketClosed(id));
@@ -40,6 +40,24 @@ export default class Controller {
       constants.event.UPDATE_USERS,
       currentUsers
     );
+
+    //Avisa a rede inteira que um novo usuario conectou-se
+    this.broadCast({
+      socketId,
+      roomId,
+      message: {id: socketId, userName: userData.userName},
+      event: constants.event.NEW_USER_CONNECTED,
+    })
+  }
+
+  broadCast({ socketId, roomId, event, message, includeCurrentSocket = false}){
+    const usersOnRoom = this.#rooms.get(roomId)
+
+    for (const [key, user] of usersOnRoom) {
+      if(!includeCurrentSocket && key === socketId) continue;
+
+      this.socketServer.sendMessage(user.socket, event, message)
+    }
   }
 
   #joinUserOnRoom(roomId, user) {
