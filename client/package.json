@@ -1,13 +1,15 @@
 {
-  "name": "client",
-  "version": "1.0.0",
+  "name": "@francisco_o_deassis/tea-chat-client",
+  "version": "1.0.4",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "tea-chat": "index.js"
+  },
   "scripts": {
     "start": "node index.js",
-    "user01": "node index.js --username Francisco --room sala01 --hostUri http://localhost:9898",
-    "user02": "node index.js --username Anderson --room sala01 --hostUri http://localhost:9898",
-    "user03": "node index.js --username Professor --room sala01 --hostUri http://localhost:9898",
+    "user01": "node index.js --username Francisco --room sala01",
+    "user02": "node index.js --username Anderson --room sala01",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Francisco de Assis",

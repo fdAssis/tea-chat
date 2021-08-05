@@ -1,5 +1,7 @@
+const PRODUCTION_URL =  'http://147.182.227.66:9898/'
+
 export default class CliConfig {
-  constructor({ username, room, hostUri }) {
+  constructor({ username, room, hostUri = PRODUCTION_URL }) {
     this.username = username;
     this.room = room;
     const { hostname, port, protocol } = new URL(hostUri);

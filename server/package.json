@@ -9,9 +9,11 @@
     "dev": "nodemon src/"
   },
   "engines": {
-    "node": "15"
+    "node": "16"
   },
   "dependencies": {
+    "global": "^4.4.0",
+    "heroku": "^7.56.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

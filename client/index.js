@@ -1,3 +1,25 @@
+#!/usr/bin/env node
+
+/*
+npm i -g @francisco_o_deassis/tea-chat-client
+
+npm unlink -g @francisco_o_deassis/tea-chat-client
+
+tea-chat \
+  --username francisco \
+  --room sala01
+
+./index.js \
+  --username francisco \
+  --room sala01
+
+node index.js \
+  --username francisco \
+  --room sala01
+  -- hostUri
+*/
+
+
 import Events from 'events';
 import TerminalController from './src/terminalController.js';
 import CliConfig from './src/cliConfig.js';
